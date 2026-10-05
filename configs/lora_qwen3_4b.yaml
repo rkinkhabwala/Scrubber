@@ -1,0 +1,25 @@
+# QLoRA on a 4-bit Qwen3-4B, sized for a 16GB M1 Pro.
+#   mlx_lm.lora --config configs/lora_qwen3_4b.yaml
+# If you hit memory pressure: batch_size 1, num_layers 8, max_seq_length 768.
+model: mlx-community/Qwen3-4B-Instruct-2507-4bit
+train: true
+data: data/mlx
+fine_tune_type: lora
+mask_prompt: true          # learn the answer, not the (long, repeated) system prompt
+num_layers: 16
+lora_parameters:
+  rank: 8
+  scale: 20.0
+  dropout: 0.05
+batch_size: 2
+grad_accumulation_steps: 4 # effective batch 8
+grad_checkpoint: true
+iters: 1500                # ~1.7 epochs over 7k examples at effective batch 8
+learning_rate: 5.0e-5
+max_seq_length: 1024
+steps_per_report: 10
+steps_per_eval: 100
+val_batches: 25
+save_every: 200
+adapter_path: adapters/qwen3-4b
+seed: 7

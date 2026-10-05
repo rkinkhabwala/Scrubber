@@ -1,0 +1,14 @@
+FROM {{GGUF}}
+
+# Qwen3 instruct chat format (ChatML). Kept explicit so Ollama never guesses the template.
+TEMPLATE """{{- range .Messages }}<|im_start|>{{ .Role }}
+{{ .Content }}<|im_end|>
+{{ end }}<|im_start|>assistant
+"""
+
+SYSTEM """{{SYSTEM}}"""
+
+PARAMETER temperature 0
+PARAMETER num_ctx 4096
+PARAMETER stop "<|im_end|>"
+PARAMETER stop "<|endoftext|>"
